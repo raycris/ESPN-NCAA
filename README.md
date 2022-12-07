@@ -22,4 +22,4 @@ This site using the following stack:
 - Linting - ESLint
 - Formatting - Prettier
 
-This template uses the new app directory in Next.js 13 (beta). This includes support for enhanced layouts, colocation of components, tests, and styles, component-level data fetching, and more.
+This template uses the new `app` directory in Next.js 13 (beta). This includes support for enhanced layouts, colocation of components, tests, and styles, component-level data fetching, and more.
