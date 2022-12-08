@@ -5,13 +5,26 @@ type RowTypes = {
   name: string;
   score: string;
   win: boolean;
+  date: string;
 };
 
 function Row(props: RowTypes) {
+  const formattedDate = new Date(props.date).toLocaleString("en-US", {
+    day: "2-digit",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
   return (
-    <div className="flex border-b border-gray-200 justify-between px-4 py-2 ">
+    <div className="flex border-b border-gray-200 justify-between px-8 py-2 ">
       <div className="flex ">
-        <Image src={props.image} alt={props.name} width={20} height={20} />
+        <Image
+          src={props.image}
+          alt={props.name}
+          width={20}
+          height={20}
+          className="h-5 w-5"
+        />
         <p className="font-semibold ml-4">{props.name}</p>
       </div>
       <div className="flex text-right">
@@ -23,7 +36,7 @@ function Row(props: RowTypes) {
             <p className="font-bold text-red-700 ml-2">L</p>
           )
         ) : (
-          <p className="text-gray-700">11/27 9MM</p>
+          <p className="text-gray-700 proportional-nums">{formattedDate}</p>
         )}
       </div>
     </div>
@@ -45,7 +58,12 @@ export default async function Page() {
   const data = await res.json();
 
   const events = data.events.map(
-    (event: { competitions: { competitors: any[] }[] }) => {
+    (event: {
+      competitions: {
+        competitors: any[];
+        date: string;
+      }[];
+    }) => {
       const competitors = event.competitions[0].competitors.map(
         (competitor) => {
           return {
@@ -65,6 +83,7 @@ export default async function Page() {
         (competitor) => competitor.id !== "66"
       )!;
       return {
+        date: event.competitions[0].date,
         name: otherTeam.name,
         logo: otherTeam.logo,
         score:
@@ -75,28 +94,32 @@ export default async function Page() {
     }
   );
 
-  console.log(events);
-
   return (
-    <div>
-      {events.map(
-        (event: {
-          logo: string;
-          name: string;
-          score: string;
-          winner: boolean;
-        }) => {
-          return (
-            <Row
-              key={event.name}
-              image={event.logo}
-              name={event.name}
-              score={event.score}
-              win={event.winner}
-            />
-          );
-        }
-      )}
-    </div>
+    <>
+      <h2 className="font-semibold text-xl ml-4">Schedule</h2>
+      <h3 className="font-semibold text-gray-700 mb-2 ml-4">Full</h3>
+      <div className="min-w-min">
+        {events.map(
+          (event: {
+            logo: string;
+            name: string;
+            score: string;
+            winner: boolean;
+            date: string;
+          }) => {
+            return (
+              <Row
+                key={event.name}
+                image={event.logo}
+                name={event.name}
+                score={event.score}
+                win={event.winner}
+                date={event.date}
+              />
+            );
+          }
+        )}
+      </div>
+    </>
   );
 }
