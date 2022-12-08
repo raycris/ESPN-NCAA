@@ -5,9 +5,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html>
+    <html lang="en" className="antialiased">
       <head />
-      <body>{children}</body>
+      <body className="mt-80">{children}</body>
     </html>
   );
 }
